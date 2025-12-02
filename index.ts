@@ -57,6 +57,10 @@ async function describeImage(pngBuffer: Buffer): Promise<string> {
   return object.description;
 }
 
+function hasDescTag(svgContent: string): boolean {
+  return /<desc>[\s\S]*?<\/desc>/i.test(svgContent);
+}
+
 async function main() {
   const files = await readdir(SVG_DIR);
   const svgFiles = files.filter((f) => f.endsWith(".svg"));
@@ -69,6 +73,12 @@ async function main() {
     try {
       const svgBuffer = await readFile(svgPath);
       const svgContent = svgBuffer.toString("utf-8");
+
+      if (hasDescTag(svgContent)) {
+        console.log(`Skipping: ${svgFile} (already has <desc> tag)`);
+        continue;
+      }
+
       console.log(`Processing: ${svgFile}`);
 
       const pngBuffer = await svgToPng(svgBuffer);
