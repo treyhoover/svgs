@@ -1,11 +1,12 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { join, basename } from "node:path";
 import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 import { z } from "zod";
 import sharp from "sharp";
 
 const SVG_DIR = "./svg";
+const CATALOG_PATH = "./catalog.md";
 const model = google("gemini-2.5-flash");
 
 const descriptionSchema = z.object({
@@ -61,38 +62,88 @@ function hasDescTag(svgContent: string): boolean {
   return /<desc>[\s\S]*?<\/desc>/i.test(svgContent);
 }
 
-async function main() {
-  const files = await readdir(SVG_DIR);
-  const svgFiles = files.filter((f) => f.endsWith(".svg"));
+function extractDescTag(svgContent: string): string | null {
+  const match = svgContent.match(/<desc>([\s\S]*?)<\/desc>/i);
+  return match ? match[1] : null;
+}
 
-  console.log(`Found ${svgFiles.length} SVG files to process\n`);
+interface CatalogEntry {
+  name: string;
+  description: string;
+}
 
-  for (const svgFile of svgFiles) {
-    const svgPath = join(SVG_DIR, svgFile);
+async function generateCatalog(
+  categories: Map<string, CatalogEntry[]>
+): Promise<void> {
+  const lines: string[] = [];
 
-    try {
-      const svgBuffer = await readFile(svgPath);
-      const svgContent = svgBuffer.toString("utf-8");
+  for (const [category, entries] of categories) {
+    const title = category.charAt(0).toUpperCase() + category.slice(1);
+    lines.push(`## ${title}\n`);
 
-      if (hasDescTag(svgContent)) {
-        console.log(`Skipping: ${svgFile} (already has <desc> tag)`);
-        continue;
-      }
-
-      console.log(`Processing: ${svgFile}`);
-
-      const pngBuffer = await svgToPng(svgBuffer);
-      const description = await describeImage(pngBuffer);
-      const updatedSvg = addDescriptionToSvg(svgContent, description);
-      await writeFile(svgPath, updatedSvg, "utf-8");
-
-      console.log(`  → "${description}"\n`);
-    } catch (error) {
-      console.error(`  ✗ Error processing ${svgFile}:`, error);
+    entries.sort((a, b) => a.name.localeCompare(b.name));
+    for (const entry of entries) {
+      lines.push(`- **${entry.name}**: ${entry.description}`);
     }
+    lines.push("");
   }
 
-  console.log("Done!");
+  await writeFile(CATALOG_PATH, lines.join("\n"), "utf-8");
+  console.log(`Generated catalog at ${CATALOG_PATH}`);
+}
+
+async function main() {
+  const categories = await readdir(SVG_DIR);
+  const catalogData = new Map<string, CatalogEntry[]>();
+
+  for (const category of categories) {
+    const categoryPath = join(SVG_DIR, category);
+    const files = await readdir(categoryPath);
+    const svgFiles = files.filter((f) => f.endsWith(".svg"));
+
+    if (svgFiles.length === 0) continue;
+
+    console.log(`\n=== ${category} ===`);
+    console.log(`Found ${svgFiles.length} SVG files to process\n`);
+
+    const entries: CatalogEntry[] = [];
+
+    for (const svgFile of svgFiles) {
+      const svgPath = join(categoryPath, svgFile);
+
+      try {
+        const svgBuffer = await readFile(svgPath);
+        const svgContent = svgBuffer.toString("utf-8");
+        const name = basename(svgFile, ".svg");
+
+        if (hasDescTag(svgContent)) {
+          console.log(`Skipping: ${svgFile} (already has <desc> tag)`);
+          const description = extractDescTag(svgContent);
+          if (description) {
+            entries.push({ name, description });
+          }
+          continue;
+        }
+
+        console.log(`Processing: ${svgFile}`);
+
+        const pngBuffer = await svgToPng(svgBuffer);
+        const description = await describeImage(pngBuffer);
+        const updatedSvg = addDescriptionToSvg(svgContent, description);
+        await writeFile(svgPath, updatedSvg, "utf-8");
+
+        entries.push({ name, description });
+        console.log(`  → "${description}"\n`);
+      } catch (error) {
+        console.error(`  ✗ Error processing ${svgFile}:`, error);
+      }
+    }
+
+    catalogData.set(category, entries);
+  }
+
+  await generateCatalog(catalogData);
+  console.log("\nDone!");
 }
 
 main();

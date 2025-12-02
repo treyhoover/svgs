@@ -1,3 +1,17 @@
+## Backgrounds
+
+- **01**: The illustration depicts a single, irregular, blob-like shape in a shade of light blue, set against a solid black background. The shape has smooth, curvilinear edges and resembles an abstract organic form.
+- **02**: The illustration features a large, light blue amorphous blob-like shape with smooth, wavy edges, set against a solid black background. The abstract form appears organic, resembling a splat or a soft cloud with three main lobes.
+- **03**: An abstract, irregularly shaped light blue blob with wavy edges floats against a solid black background. The shape resembles a distorted human torso or a casual paint splat.
+- **04**: An abstract illustration features a large, irregularly shaped blob of light blue against a solid black background. The blob has smooth, wavy edges and an organic, fluid appearance.
+- **05**: A light blue, irregularly shaped blob or amoeba-like form is depicted against a black background. The shape has smooth, curvilinear edges, resembling a bean or a rounded organic mass.
+- **06**: An illustration features a large, irregular, and organic light blue shape floating against a stark black background. The blob-like form has smooth, undulating curves reminiscent of a fluid or abstract amoeba.
+- **07**: An abstract, irregular blue shape with soft, undulating edges floats against a solid black background. The shape resembles a fluid or organic form.
+- **08**: An abstract illustration shows a light blue, irregular, amorphous shape with rounded edges against a solid black background. The organic form has a fluid, blob-like appearance.
+- **09**: An abstract illustration features a light blue, organic, blob-like shape with smooth, rounded edges, floating against a solid black background.
+- **10**: A large, irregularly shaped light blue blob is prominently displayed against a stark black background. Its smooth, organic curves give it an abstract, fluid, or amoeba-like appearance.
+- **11**: An illustration features a light blue, amorphous, blob-like shape with soft, irregular edges, set against a solid black background.
+
 ## Illustrations
 
 - **a_day_off**: An illustration showing three individuals outdoors with two stylized trees. A woman sits under one tree, looking at her phone, while two men stand near the other tree in conversation.
@@ -677,17 +691,3 @@
 - **year_2022**: A stylized illustration prominently features the large blue numbers "2022" in the foreground. Behind them, a minimalist landscape shows grey mountains, dark trees, and a pink sun against a black sky, with a light grey ground featuring ripples and scattered colorful dots.
 - **yoga**: A stylized person with dark skin stands on one leg, striking a dynamic pose with their arms bent. They appear to be performing a balance exercise or dance move, with simple plant motifs at their feet.
 - **youtube_tutorial**: A person stands, looking at a large video player interface on a screen, which displays a speaker. The video player includes standard playback controls and a sidebar for other videos.
-
-## Backgrounds
-
-- **01**: Abstract background pattern
-- **02**: Abstract background pattern
-- **03**: Abstract background pattern
-- **04**: Abstract background pattern
-- **05**: Abstract background pattern
-- **06**: Abstract background pattern
-- **07**: Abstract background pattern
-- **08**: Abstract background pattern
-- **09**: Abstract background pattern
-- **10**: Abstract background pattern
-- **11**: Abstract background pattern
